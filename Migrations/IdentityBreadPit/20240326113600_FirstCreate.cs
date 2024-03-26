@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectBreadPit.Migrations.IdentityBreadPit
 {
-    public partial class InitialMigration : Migration
+    public partial class FirstCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

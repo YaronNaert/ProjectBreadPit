@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<IdentityBreadPitContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<BreadPitContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<IdentityBreadPitContext>();
 
@@ -17,6 +21,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
+
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
 
 
 var app = builder.Build();
@@ -36,6 +47,8 @@ app.UseRouting();
 app.UseAuthentication();;
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

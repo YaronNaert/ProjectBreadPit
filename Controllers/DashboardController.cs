@@ -7,10 +7,10 @@ namespace ProjectBreadPit.Controllers
     {
         public IActionResult Dashboard()
         {
-            List<Sandwich> sandwiches = new List<Sandwich>
+            List<Broodje> sandwiches = new List<Broodje>
             {
-                new Sandwich { Name = "Préparé", ImageUrl = "/images/Préparé.png", Price = "4 euro" },
-                new Sandwich { Name = "Turkey Club", ImageUrl = "turkey_club.jpg", Price = "5 euro" },
+                new Broodje { Name = "Préparé", ImageName = "Préparé.png", Price = 4.00M },
+                new Broodje { Name = "Turkey Club", ImageName = "turkey_club.jpg", Price = 5.50M },
             };
             return View(sandwiches);
         }

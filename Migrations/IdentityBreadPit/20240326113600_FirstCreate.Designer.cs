@@ -12,8 +12,8 @@ using ProjectBreadPit.Data;
 namespace ProjectBreadPit.Migrations.IdentityBreadPit
 {
     [DbContext(typeof(IdentityBreadPitContext))]
-    [Migration("20240313141730_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240326113600_FirstCreate")]
+    partial class FirstCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

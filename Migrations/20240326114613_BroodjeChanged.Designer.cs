@@ -11,8 +11,8 @@ using ProjectBreadPit.Data;
 namespace ProjectBreadPit.Migrations
 {
     [DbContext(typeof(BreadPitContext))]
-    [Migration("20240305113946_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240326114613_BroodjeChanged")]
+    partial class BroodjeChanged
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace ProjectBreadPit.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ProjectBreadPit.Models.Sandwich", b =>
+            modelBuilder.Entity("ProjectBreadPit.Models.Broodje", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +31,7 @@ namespace ProjectBreadPit.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -39,9 +39,8 @@ namespace ProjectBreadPit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(6,2)");
 
                     b.HasKey("Id");
 

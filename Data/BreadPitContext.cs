@@ -5,7 +5,14 @@ namespace ProjectBreadPit.Data
 {
     public class BreadPitContext : DbContext
     {
-        public DbSet<Sandwich> broodjes { get; set;} = null!;
+
+        public BreadPitContext(DbContextOptions<BreadPitContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Broodje> broodjes { get; set;} = null!;
+
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
