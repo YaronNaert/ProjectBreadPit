@@ -1,0 +1,76 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sandwiches {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.sandwich {
+    width: 300px;
+    margin: 20px;
+    text-align: center;
+}
+
+.sandwich img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.sandwich h2 {
+    margin-top: 10px;
+}
+
+.sandwich p {
+    margin-top: 5px;
+}
+
+.sandwich input[type="number"] {
+    width: 70px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.sandwich button {
+    margin-top: 10px;
+    padding: 8px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .sandwich button:hover {
+        background-color: #0056b3;
+    }

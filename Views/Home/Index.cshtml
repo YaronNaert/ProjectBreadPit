@@ -1,0 +1,35 @@
+﻿@model User
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>Login</h2>
+
+            @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "needs-validation", novalidate = "true" }))
+            {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                        @Html.LabelFor(model => model.Username)
+                        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Enter your username", required = "true" })
+                <div class="invalid-feedback">Please enter your username.</div>
+            </div>
+            <div class="form-group">
+                        @Html.LabelFor(model => model.Password)
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter your password", required = "true" })
+                <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary" name="loginButton">Login</button>
+                <button type="submit" class="btn btn-primary" name="registerButton">Register</button>
+            </div>
+            <div>@ViewBag.ErrorMessage</div>
+
+                }
+
+        </div>
+    </div>
+</div>
