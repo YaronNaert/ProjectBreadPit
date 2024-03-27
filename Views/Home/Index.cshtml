@@ -4,30 +4,43 @@
     ViewData["Title"] = "Sandwiches";
 }
 
+<div class="hamburger-menu" onclick="toggleCartDetails()">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+</div>
+
+<div class="cart-details" style="display: none;">
+    <h2>Shopping Cart</h2>
+    <ul id="cart-items">
+        <!-- Cart items will be dynamically added here -->
+    </ul>
+    <div>Total: <span id="cart-total"></span></div>
+</div>
 <h1>Sandwiches</h1>
 
 <div class="row">
     @foreach (var broodje in Model)
     {
-            <div class="col-md-3 mb-3">
-                <div class="card">
-                    <img src="@broodje.ImageName" class="card-img-top" alt="@broodje.Name">
-                    <div class="card-body">
-                        <h5 class="card-title">@broodje.Name</h5>
-                        <p class="card-text">Price: $@broodje.Price</p>
-                        <div class="form-group">
-                            <label for="quantity">Quantity:</label>
-                            <select class="form-control" id="quantity" name="quantity">
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <img src="@broodje.ImageName" class="card-img-top" alt="@broodje.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">@broodje.Name</h5>
+                            <p class="card-text">Price: $@broodje.Price</p>
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <select class="form-control" id="quantity" name="quantity">
                             @for (var i = 1; i <= 10; i++)
                             {
-                                        <option value="@i">@i</option>
+                                                <option value="@i">@i</option>
                             }
-                            </select>
+                                </select>
+                            </div>
+                                    <button type="button" class="btn btn-primary btn-add-to-cart mt-3" data-sandwich-id="@broodje.Id" data-sandwich-price="@broodje.Price" data-sandwich-name="@broodje.Name">Add to Cart</button>
                         </div>
-                        <button type="button" class="btn btn-primary btn-add-to-cart" data-sandwich-id="@broodje.Id">Add to Cart</button>
                     </div>
                 </div>
-            </div>
     }
 </div>
 
@@ -35,11 +48,51 @@
         <script>
             $(document).ready(function () {
                 $('.btn-add-to-cart').click(function () {
-                    var broodjeId = $(this).data('broodje-id');
-                    var hoeveelheid = $(this).closest('.card-body').find('#hoeveelheid').val();
-                    // You can implement the logic to add the sandwich to the cart here
-                    console.log("Broodje toegevoegd met ID " + broodjeId + " en hoeveelheid " + hoeveelheid + " aan het mandje.");
+                    var broodjeId = $(this).data('sandwich-id');
+                    var broodjePrice = $(this).data('sandwich-price');
+                    var broodjeName = $(this).data('sandwich-name');
+                    var quantity = $(this).closest('.card-body').find('#quantity').val();
+
+                    // Make an AJAX request to add the item to the cart and update cart details
+                    $.ajax({
+                        url: '/Home/AddToCart', // Corrected URL
+                        type: 'POST',
+                        data: {
+                            broodjeId: broodjeId,
+                            broodjeName: broodjeName,
+                            price: broodjePrice,
+                            quantity: quantity
+                        },
+                        success: function (response) {
+                            // Optionally handle success response
+                            console.log("Item successfully added to the cart");
+
+                            // Make another AJAX request to retrieve updated cart details
+                            $.ajax({
+                                url: '/Cart/GetCartDetails',
+                                type: 'GET',
+                                success: function (response) {
+                                    // Populate cart details section with data from response
+                                    $('#cart-items').html(response.itemsHtml);
+                                    $('#cart-total').text(response.total);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("Error retrieving cart details: " + error);
+                                }
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            // Optionally handle error response
+                            console.error("Error adding item to cart: " + error);
+                        }
+                    });
                 });
             });
+
+            // Function to toggle visibility of cart details section
+            function toggleCartDetails() {
+                var cartDetails = document.querySelector('.cart-details');
+                cartDetails.style.display = (cartDetails.style.display === 'none') ? 'block' : 'none';
+            }
         </script>
 }

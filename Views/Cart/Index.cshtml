@@ -15,10 +15,11 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Broodje Name</th>
+                    <th>Name</th>
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Action</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +27,7 @@ else
             {
                         <tr>
                             <td>@item.BroodjeName</td>
-                            <td>@item.Price</td>
+                            <td>€@item.Price</td>
                             <td>@item.Quantity</td>
                             <td>
                                 <form asp-action="RemoveFromCart" asp-controller="Cart">
@@ -34,8 +35,19 @@ else
                                     <button type="submit" class="btn btn-danger">Remove</button>
                                 </form>
                             </td>
+                            <td>€@(item.Price * item.Quantity)</td>
                         </tr>
             }
             </tbody>
         </table>
 }
+
+<div>
+    <h4>Total</h4>
+    <p>Grand Total: €@(Model.Sum(item => item.Price * item.Quantity))</p>
+</div>
+<div>
+    <form method="post" action="/Cart/PlaceOrder">
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+</div>

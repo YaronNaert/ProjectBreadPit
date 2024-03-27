@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
+using System;
 using System.Diagnostics;
 
 namespace ProjectBreadPit.Controllers
@@ -38,6 +39,7 @@ namespace ProjectBreadPit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [HttpPost]
         public IActionResult AddToCart(int broodjeId, string broodjeName, decimal price, int quantity)
         {
             // Retrieve cart from session or create a new one if it doesn't exist
@@ -67,7 +69,7 @@ namespace ProjectBreadPit.Controllers
             HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cart));
 
             // Redirect to the home page
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
         }
 
     }

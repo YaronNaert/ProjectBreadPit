@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
@@ -10,6 +11,13 @@ namespace ProjectBreadPit.Controllers
 {
     public class CartController : Controller
     {
+        private readonly BreadPitContext _context;
+
+        public CartController(BreadPitContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             // Retrieve cart from session or create a new one if it doesn't exist
@@ -38,5 +46,62 @@ namespace ProjectBreadPit.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult GetCartDetails()
+        {
+            // Retrieve cart from session
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = string.IsNullOrEmpty(cartJson) ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartJson);
+
+            // Calculate total price
+            decimal totalPrice = cart.Sum(item => item.Price * item.Quantity);
+
+            // Prepare data to send to the client
+            var cartDetails = new
+            {
+                ItemsHtml = RenderCartItemsHtml(cart),
+                Total = totalPrice.ToString("C") // Format total price as currency
+            };
+
+            return Json(cartDetails);
+        }
+
+        private string RenderCartItemsHtml(List<CartItem> cart)
+        {
+            // Create HTML string for cart items
+            string itemsHtml = "";
+            foreach (var item in cart)
+            {
+                itemsHtml += $"<li>{item.BroodjeName} - Quantity: {item.Quantity} - Price: {item.Price * item.Quantity:C}</li>";
+            }
+            return itemsHtml;
+        }
+
+        [HttpPost]
+        public IActionResult PlaceOrder()
+        {
+            // Retrieve cart from session
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = string.IsNullOrEmpty(cartJson) ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartJson);
+
+            // Save the items from the cart to the database
+            foreach (var item in cart)
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.broodjes.Add(broodje);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(broodje);
+            }
+
+            // Clear the cart after placing the order
+            HttpContext.Session.Remove("Cart");
+
+            // Optionally, you can redirect the user to a thank you page or back to the cart page
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

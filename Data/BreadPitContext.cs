@@ -11,8 +11,9 @@ namespace ProjectBreadPit.Data
         }
 
         public DbSet<Broodje> broodjes { get; set;} = null!;
+        public DbSet<Order> orders { get; set; } = null!;
 
-        
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
