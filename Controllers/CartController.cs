@@ -84,22 +84,33 @@ namespace ProjectBreadPit.Controllers
             var cartJson = HttpContext.Session.GetString("Cart");
             var cart = string.IsNullOrEmpty(cartJson) ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartJson);
 
+            // Create a new order
+            var order = new Order();
+
             // Save the items from the cart to the database
-            foreach (var item in cart)
+            foreach (var cartItem in cart)
             {
-                if (ModelState.IsValid)
+                // Create a new OrderItem object and map properties from the cartItem
+                var orderItem = new OrderItem
                 {
-                    _context.broodjes.Add(broodje);
-                    _context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                return View(broodje);
+                    BroodjeId = cartItem.BroodjeId,
+                    BroodjeName = cartItem.BroodjeName,
+                    Price = cartItem.Price,
+                    Quantity = cartItem.Quantity
+                };
+
+                // Add the order item to the order's collection
+                order.OrderItems.Add(orderItem);
             }
+
+            // Add the order to the context and save changes
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
             // Clear the cart after placing the order
             HttpContext.Session.Remove("Cart");
 
-            // Optionally, you can redirect the user to a thank you page or back to the cart page
+            // Redirect to the desired action
             return RedirectToAction("Index", "Home");
         }
 

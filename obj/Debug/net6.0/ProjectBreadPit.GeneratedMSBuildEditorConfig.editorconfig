@@ -43,12 +43,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/New.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTmV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/OrderManager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cT3JkZXJNYW5hZ2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Cart/Index.cshtml]
@@ -61,6 +69,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Manager/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Shared/Error.cshtml]

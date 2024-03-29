@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectBreadPit.Data;
 
@@ -10,9 +11,10 @@ using ProjectBreadPit.Data;
 namespace ProjectBreadPit.Migrations
 {
     [DbContext(typeof(BreadPitContext))]
-    partial class BreadPitContextModelSnapshot : ModelSnapshot
+    [Migration("20240329135259_AddOrderModel")]
+    partial class AddOrderModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

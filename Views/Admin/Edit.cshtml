@@ -1,0 +1,91 @@
+﻿@model ProjectBreadPit.Models.Order
+
+<h1>Edit Order</h1>
+
+<h2>Order Details</h2>
+<p>Order ID: @Model.OrderId</p>
+<p>Total Price: €@Model.OrderItems.Sum(item => item.Price * item.Quantity)</p>
+
+<h2>Sandwiches in Order</h2>
+<ul>
+    @foreach (var item in Model.OrderItems)
+    {
+            <li>
+            @item.BroodjeName - Quantity: @item.Quantity - Price: €@item.Price
+                <button class="btn btn-danger remove-item-btn" data-order-id="@Model.OrderId" data-order-item-id="@item.OrderItemId">Remove</button>
+            </li>
+    }
+</ul>
+
+<h2>Add Sandwich</h2>
+<form id="add-sandwich-form" asp-controller="Admin" asp-action="AddItem" method="post">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <label for="broodjeId">Select Sandwich:</label>
+    <select name="broodjeId" id="broodjeId">
+        @foreach (var broodje in ViewBag.Broodjes)
+        {
+                <option value="@broodje.Id">@broodje.Name - €@broodje.Price</option>
+        }
+    </select>
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" value="1" min="1" />
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<p>
+    <a asp-action="OrderManager" class="btn btn-primary">Go back</a>
+</p>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.remove-item-btn', function (e) {
+                e.preventDefault(); // Prevent the default action of the button
+                var orderId = $(this).data('order-id');
+                var orderItemId = $(this).data('order-item-id');
+                var button = $(this); // Store reference to the button
+
+                $.ajax({
+                    url: '/Admin/RemoveItem',
+                    method: 'POST',
+                    data: { orderId: orderId, orderItemId: orderItemId },
+                    success: function (response) {
+                        if (response.success) {
+                            // Remove the item from the UI
+                            button.closest('li').remove(); // Use the stored reference to the button
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while removing the item.');
+                    }
+                });
+            });
+
+            $('#add-sandwich-form').submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(), // Serialize the form data
+                    success: function (response) {
+                        // Add the new sandwich to the UI
+                        var orderId = $('#orderId').val();
+                        var broodjeId = $('#broodjeId').val();
+                        var broodjeName = $('#broodjeId option:selected').text().split(' - ')[0];
+                        var price = $('#broodjeId option:selected').text().split(' - ')[1].split('€')[1];
+                        var quantity = $('#quantity').val();
+
+                        // Clear the form fields
+                        $('#quantity').val(1);
+                    },
+                    error: function () {
+                        alert('An error occurred while adding the sandwich.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
