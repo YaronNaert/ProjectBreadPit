@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ProjectBreadPit.Models.Broodje>
+
+@{
+    ViewData["Title"] = "Total Sandwich Orders";
+}
+
+<h1>Total Sandwich Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sandwich</th>
+            <th>Total Quantity Ordered</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sandwich in Model)
+        {
+                <tr>
+                    <td>@sandwich.Name</td>
+                    <td>@sandwich.OrderItems.Sum(item => item.Quantity)</td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Manager" asp-action="Index" class="btn btn-primary">Go back</a>
+</div>

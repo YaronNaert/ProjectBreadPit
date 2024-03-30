@@ -17,6 +17,12 @@ public class ManagerController : Controller
         _context = context;
     }
 
+    public IActionResult Index()
+    {
+        var orders = _context.Orders.Include(o => o.OrderItems).ToList();
+        return View(orders);
+    }
+
     public IActionResult OrdersOverview()
     {
         var orders = _context.Orders.ToList();
@@ -29,11 +35,12 @@ public class ManagerController : Controller
         return View(broodje);
     }
 
-    // Add action method for viewing total sandwich orders
-    public IActionResult TotalSandwichOrders()
+    public IActionResult TotalSandwiches()
     {
-        // Logic to retrieve total sandwich orders
-        // and pass them to the view
-        return View();
+        // Query the database to get the total quantity of each sandwich ordered
+        var sandwiches = _context.broodjes.Include(b => b.OrderItems).ToList();
+
+        return View(sandwiches);
     }
+
 }

@@ -51,6 +51,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/ManageRoles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlUm9sZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Admin/New.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTmV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -63,16 +67,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Cart/WarningView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxXYXJuaW5nVmlldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Manager/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Manager/TotalSandwiches.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxUb3RhbFNhbmR3aWNoZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/naert/Documents/School/S4/WD/Labs/ProjectBreadPit/ProjectBreadPit/Views/Shared/Error.cshtml]

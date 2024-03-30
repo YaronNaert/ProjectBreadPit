@@ -10,9 +10,8 @@
     <thead>
         <tr>
             <th>Order ID</th>
-            <th>Customer Name</th>
             <th>Total Price</th>
-            <th>Action</th>
+            <th>Items</th>
         </tr>
     </thead>
     <tbody>
@@ -20,10 +19,20 @@
         {
                 <tr>
                     <td>@order.OrderId</td>
-                    <td>@order.CustomerName</td>
-                    <td>@order.TotalPrice</td>
-                    <td><a href="@Url.Action("OrderDetails", "Manager", new { orderId = order.OrderId })">View Details</a></td>
+                    <td>€@(order.OrderItems.Sum(oi => oi.Price * oi.Quantity))</td>
+                    <td>
+                        <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                                    <li>@item.BroodjeName - Quantity: @item.Quantity</li>
+                        }
+                        </ul>
+                    </td>
                 </tr>
         }
     </tbody>
 </table>
+
+<div>
+    <a asp-controller="Manager" asp-action="TotalSandwiches" class="btn btn-primary">Total Sandwich Orders</a>
+</div>

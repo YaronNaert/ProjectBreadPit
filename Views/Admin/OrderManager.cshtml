@@ -7,6 +7,7 @@
         <tr>
             <th>Order ID</th>
             <th>Total Price</th>
+            <th>User</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -16,6 +17,7 @@
                 <tr>
                     <td>@order.OrderId</td>
                     <td>€@(order.OrderItems.Sum(item => item.Price * item.Quantity))</td>
+                    <td>@order.UserName</td>
                     <td>
                         <a href="@Url.Action("Edit", "Admin", new { id = order.OrderId })">Edit</a> |
                         <button class="btn btn-danger" onclick="deleteOrder(@order.OrderId)">Delete</button>

@@ -19,22 +19,27 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">Manager</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Manager"))
+                        {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">Manager</a>
+                                </li>
+                        }
                     </ul>
-
+                    @if (User.IsInRole("Admin"))
+                    {
+                            <partial name="_AdminPartial" />
+                    }
                     <partial name="_LoginPartial" />
-                    <partial name="_AdminPartial" />
                 </div>
             </div>
         </nav>

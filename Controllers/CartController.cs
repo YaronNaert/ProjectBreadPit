@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProjectBreadPit.Data;
@@ -80,12 +81,21 @@ namespace ProjectBreadPit.Controllers
         [HttpPost]
         public IActionResult PlaceOrder()
         {
+            // Check if the user is authenticated
+            if (!User.Identity.IsAuthenticated)
+            {
+                // If the user is not authenticated, display a warning message
+                ViewData["ErrorMessage"] = "You must be logged in to place an order.";
+                return View("WarningView"); // Return a view with the warning message
+            }
+
             // Retrieve cart from session
             var cartJson = HttpContext.Session.GetString("Cart");
             var cart = string.IsNullOrEmpty(cartJson) ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartJson);
 
             // Create a new order
-            var order = new Order();
+            var userName = User.Identity.Name;
+            var order = new Order(userName);
 
             // Save the items from the cart to the database
             foreach (var cartItem in cart)
@@ -113,6 +123,7 @@ namespace ProjectBreadPit.Controllers
             // Redirect to the desired action
             return RedirectToAction("Index", "Home");
         }
+
 
     }
 }

@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectBreadPit.Data;
+using ProjectBreadPit.Background;
 using System;
 using System.Configuration;
+using Hangfire;
+using Hangfire.SqlServer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,15 +16,21 @@ builder.Services.AddDbContext<IdentityBreadPitContext>(options =>
 builder.Services.AddDbContext<BreadPitContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<IdentityBreadPitContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<IdentityBreadPitContext>();
+/*builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<IdentityBreadPitContext>();*/
+
 
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHangfire(config => config.UseSqlServerStorage("Server=(localdb)\\mssqllocaldb;Database=ProjectBreadPit;Trusted_Connection=True;"));
 
 
 builder.Services.AddSession(options =>
@@ -55,4 +64,31 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+app.UseHangfireServer();
+
+RecurringJob.AddOrUpdate<Purge>("OrderCleanupJob",
+    x => x.DeleteOrdersAndOrderItems(),
+    "30 14 * * *");
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await CreateRoles(roleManager);
+}
+
 app.Run();
+
+async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+{
+    // Check if roles exist, if not create them
+    string[] roleNames = { "Admin", "Manager", "User" };
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}

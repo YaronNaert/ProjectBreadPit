@@ -1,20 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly BreadPitContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
 
-    public AdminController(BreadPitContext context)
+    public AdminController(BreadPitContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public IActionResult Index()
@@ -23,11 +30,13 @@ public class AdminController : Controller
         return View(broodje);
     }
 
+
     [HttpGet]
     public IActionResult New()
     {
         return View();
     }
+
 
     [HttpPost]
     public IActionResult New(Broodje broodje)
@@ -40,6 +49,8 @@ public class AdminController : Controller
         }
         return View(broodje);
     }
+
+
     public IActionResult OrderManager()
     {
         var orders = _context.Orders.Include(o => o.OrderItems).ToList();
@@ -54,7 +65,7 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        // Retrieve list of available sandwiches
+
         var broodjes = _context.broodjes.ToList();
         ViewBag.Broodjes = broodjes;
 
@@ -74,6 +85,7 @@ public class AdminController : Controller
         return View(order);
     }
 
+
     [HttpPost]
     public IActionResult Delete(int id)
     {
@@ -86,8 +98,9 @@ public class AdminController : Controller
         _context.Orders.Remove(order);
         _context.SaveChanges();
 
-        return Ok(); 
+        return Ok();
     }
+
 
     [HttpPost]
     public IActionResult RemoveItem(int orderId, int orderItemId)
@@ -123,12 +136,12 @@ public class AdminController : Controller
         var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.BroodjeId == broodjeId);
         if (existingOrderItem != null)
         {
-            // If the order item already exists, update its quantity
+
             existingOrderItem.Quantity += quantity;
         }
         else
         {
-            // If the order item does not exist, create a new one
+
             var broodje = _context.broodjes.FirstOrDefault(b => b.Id == broodjeId);
             if (broodje == null)
             {
@@ -148,10 +161,61 @@ public class AdminController : Controller
 
         _context.SaveChanges();
 
-        // You can return any necessary data or status here
+
         return Json(new { success = true });
+    }
+    public async Task<IActionResult> ManageRoles()
+    {
+        var users = await _userManager.Users.ToListAsync();
+        var roles = await _roleManager.Roles.ToListAsync();
+
+        // Convert roles to SelectListItem
+        ViewBag.Roles = roles.Select(r => new SelectListItem { Text = r.Name, Value = r.Name }).ToList();
+
+        ViewBag.UserManager = _userManager; // Pass UserManager to the view
+        return View(users);
     }
 
 
 
+    [HttpPost]
+    public async Task<IActionResult> ChangeUserRole(string userId, string role)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // Remove all existing roles for the user
+        var roles = await _userManager.GetRolesAsync(user);
+        await _userManager.RemoveFromRolesAsync(user, roles);
+
+        // Add the selected role
+        await _userManager.AddToRoleAsync(user, role);
+
+        return RedirectToAction("ManageRoles");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteUser(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            return RedirectToAction("ManageRoles");
+        }
+        else
+        {
+            // Handle errors if user deletion fails
+            ModelState.AddModelError("", "Failed to delete user.");
+            return RedirectToAction("ManageRoles");
+        }
+    }
 }

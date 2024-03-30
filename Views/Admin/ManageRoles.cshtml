@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+
+<h1>Manage User Roles</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Action</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                    @foreach (var role in await ViewBag.UserManager.GetRolesAsync(user))
+                    {
+                                <span>@role</span>
+                    }
+                    </td>
+                    <td>
+                    @if (!(await ViewBag.UserManager.IsInRoleAsync(user, "Admin")))
+                    {
+                                <form asp-controller="Admin" asp-action="ChangeUserRole" method="post" class="d-flex">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <select name="role" class="form-control me-2">
+                                @foreach (var role in ViewBag.Roles)
+                                {
+                                                <option value="@role.Value">@role.Text</option>
+                                }
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Set Role</button>
+                                </form>
+                    }
+                    </td>
+                    <td>
+                        <form asp-controller="Admin" asp-action="DeleteUser" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
