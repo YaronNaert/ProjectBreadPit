@@ -40,10 +40,10 @@
     <script>
         $(document).ready(function () {
             $(document).on('click', '.remove-item-btn', function (e) {
-                e.preventDefault(); // Prevent the default action of the button
+                e.preventDefault(); 
                 var orderId = $(this).data('order-id');
                 var orderItemId = $(this).data('order-item-id');
-                var button = $(this); // Store reference to the button
+                var button = $(this); 
 
                 $.ajax({
                     url: '/Admin/RemoveItem',
@@ -51,8 +51,7 @@
                     data: { orderId: orderId, orderItemId: orderItemId },
                     success: function (response) {
                         if (response.success) {
-                            // Remove the item from the UI
-                            button.closest('li').remove(); // Use the stored reference to the button
+                            button.closest('li').remove();
                         }
                     },
                     error: function () {
@@ -62,21 +61,19 @@
             });
 
             $('#add-sandwich-form').submit(function (e) {
-                e.preventDefault(); // Prevent the default form submission
+                e.preventDefault();
 
                 $.ajax({
                     url: $(this).attr('action'),
                     method: 'POST',
-                    data: $(this).serialize(), // Serialize the form data
+                    data: $(this).serialize(),
                     success: function (response) {
-                        // Add the new sandwich to the UI
                         var orderId = $('#orderId').val();
                         var broodjeId = $('#broodjeId').val();
                         var broodjeName = $('#broodjeId option:selected').text().split(' - ')[0];
                         var price = $('#broodjeId option:selected').text().split(' - ')[1].split('€')[1];
                         var quantity = $('#quantity').val();
 
-                        // Clear the form fields
                         $('#quantity').val(1);
                     },
                     error: function () {

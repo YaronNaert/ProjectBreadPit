@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Background;
-using System;
-using System.Configuration;
 using Hangfire;
-using Hangfire.SqlServer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,12 +18,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
-/*builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<IdentityBreadPitContext>();*/
-
-
-
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
@@ -35,7 +26,7 @@ builder.Services.AddHangfire(config => config.UseSqlServerStorage("Server=(local
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.IsEssential = true;
 });
 
 
@@ -82,7 +73,6 @@ app.Run();
 
 async Task CreateRoles(RoleManager<IdentityRole> roleManager)
 {
-    // Check if roles exist, if not create them
     string[] roleNames = { "Admin", "Manager", "User" };
     foreach (var roleName in roleNames)
     {

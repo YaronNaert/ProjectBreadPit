@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 [Authorize(Roles = "Admin")]
 public class AdminController : Controller
@@ -15,13 +13,15 @@ public class AdminController : Controller
     private readonly BreadPitContext _context;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<AdminController> _logger;
 
 
-    public AdminController(BreadPitContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    public AdminController(BreadPitContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger)
     {
         _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
+        _logger = logger;
     }
 
     public IActionResult Index()
@@ -41,13 +41,18 @@ public class AdminController : Controller
     [HttpPost]
     public IActionResult New(Broodje broodje)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            _context.broodjes.Add(broodje);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                _logger.LogError(error.ErrorMessage);
+            }
+
+            return View(broodje); 
         }
-        return View(broodje);
+        _context.broodjes.Add(broodje);
+        _context.SaveChanges();
+        return RedirectToAction("Index");
     }
 
 
@@ -169,10 +174,9 @@ public class AdminController : Controller
         var users = await _userManager.Users.ToListAsync();
         var roles = await _roleManager.Roles.ToListAsync();
 
-        // Convert roles to SelectListItem
         ViewBag.Roles = roles.Select(r => new SelectListItem { Text = r.Name, Value = r.Name }).ToList();
 
-        ViewBag.UserManager = _userManager; // Pass UserManager to the view
+        ViewBag.UserManager = _userManager; 
         return View(users);
     }
 
@@ -187,11 +191,9 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        // Remove all existing roles for the user
         var roles = await _userManager.GetRolesAsync(user);
         await _userManager.RemoveFromRolesAsync(user, roles);
 
-        // Add the selected role
         await _userManager.AddToRoleAsync(user, role);
 
         return RedirectToAction("ManageRoles");
@@ -213,9 +215,26 @@ public class AdminController : Controller
         }
         else
         {
-            // Handle errors if user deletion fails
             ModelState.AddModelError("", "Failed to delete user.");
             return RedirectToAction("ManageRoles");
         }
     }
+
+    [HttpPost]
+    public IActionResult DeleteBroodje(int id)
+    {
+        var broodje = _context.broodjes.Find(id);
+        if (broodje == null)
+        {
+            return NotFound();
+        }
+
+        _context.broodjes.Remove(broodje);
+        _context.SaveChanges();
+
+        return RedirectToAction("Index");
+    }
+
+
+
 }

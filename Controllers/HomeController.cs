@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
-using System;
 using System.Diagnostics;
 
 namespace ProjectBreadPit.Controllers
@@ -42,20 +40,16 @@ namespace ProjectBreadPit.Controllers
         [HttpPost]
         public IActionResult AddToCart(int broodjeId, string broodjeName, decimal price, int quantity)
         {
-            // Retrieve cart from session or create a new one if it doesn't exist
             var cartJson = HttpContext.Session.GetString("Cart");
             var cart = string.IsNullOrEmpty(cartJson) ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartJson);
 
-            // Check if the item is already in the cart
             var existingItem = cart.FirstOrDefault(item => item.BroodjeId == broodjeId);
             if (existingItem != null)
             {
-                // Update quantity if item is already in the cart
                 existingItem.Quantity += quantity;
             }
             else
             {
-                // Add new item to the cart
                 cart.Add(new CartItem
                 {
                     BroodjeId = broodjeId,
@@ -65,10 +59,8 @@ namespace ProjectBreadPit.Controllers
                 });
             }
 
-            // Save the updated cart back to session
             HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cart));
 
-            // Redirect to the home page
             return RedirectToAction("Index");
         }
 

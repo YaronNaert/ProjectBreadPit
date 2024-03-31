@@ -89,3 +89,12 @@ h1 {
     height: 4px;
     background-color: #333;
 }
+
+.hamburger-menu-container {
+    display: flex; 
+    align-items: center; 
+}
+
+.menu-text {
+    margin-left: 10px;
+}

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectBreadPit.Models.Broodje>
+﻿@model IEnumerable<ProjectBreadPit.Models.BroodjeWithTotalQuantity>
 
 @{
     ViewData["Title"] = "Total Sandwich Orders";
@@ -17,8 +17,8 @@
         @foreach (var sandwich in Model)
         {
                 <tr>
-                    <td>@sandwich.Name</td>
-                    <td>@sandwich.OrderItems.Sum(item => item.Quantity)</td>
+                    <td>@sandwich.Broodje.Name</td>
+                    <td>@sandwich.TotalQuantity</td>
                 </tr>
         }
     </tbody>

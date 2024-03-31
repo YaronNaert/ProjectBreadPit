@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
 
 namespace ProjectBreadPit.Models
 {
@@ -11,7 +10,6 @@ namespace ProjectBreadPit.Models
 
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
-        public ICollection<OrderItem> OrderItems { get; set; }
     }
 
 }

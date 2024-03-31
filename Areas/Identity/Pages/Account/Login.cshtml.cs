@@ -119,11 +119,9 @@ namespace ProjectBreadPit.Areas.Identity.Pages.Account
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     if (user != null)
                     {
-                        // Check if the user is in the "Admin" role
                         var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
                         var isManager = await _userManager.IsInRoleAsync(user, "Manager");
 
-                        // Redirect to the admin page if the user is an admin
                         if (isAdmin)
                         {
                             return RedirectToAction("Index", "Admin");
@@ -155,7 +153,6 @@ namespace ProjectBreadPit.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

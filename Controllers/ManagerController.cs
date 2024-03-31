@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectBreadPit.Data;
 using ProjectBreadPit.Models;
-using System.Collections.Generic;
-using System.Linq;
+
 
 
 public class ManagerController : Controller
@@ -37,8 +35,19 @@ public class ManagerController : Controller
 
     public IActionResult TotalSandwiches()
     {
-        // Query the database to get the total quantity of each sandwich ordered
-        var sandwiches = _context.broodjes.Include(b => b.OrderItems).ToList();
+        var sandwichQuantities = _context.OrderItems
+            .GroupBy(oi => oi.BroodjeId)
+            .Select(g => new { BroodjeId = g.Key, TotalQuantity = g.Sum(oi => oi.Quantity) })
+            .ToList();
+
+        var sandwiches = _context.broodjes
+            .Where(b => sandwichQuantities.Any(sq => sq.BroodjeId == b.Id))
+            .Select(b => new BroodjeWithTotalQuantity
+            {
+                Broodje = b,
+                TotalQuantity = sandwichQuantities.FirstOrDefault(sq => sq.BroodjeId == b.Id) != null ? sandwichQuantities.FirstOrDefault(sq => sq.BroodjeId == b.Id).TotalQuantity : 0
+            })
+            .ToList();
 
         return View(sandwiches);
     }

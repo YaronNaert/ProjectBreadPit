@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectBreadPit.Models
@@ -10,14 +9,13 @@ namespace ProjectBreadPit.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderId { get; set; }
 
-        public string UserName { get; set; } // Property to store the username
+        public string UserName { get; set; }
 
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); // Initialize OrderItems
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-        // Constructor to set the username when creating an order
         public Order(string userName)
         {
-            UserName = userName; // Set the username from the parameter
+            UserName = userName;
         }
     }
 
@@ -27,16 +25,15 @@ namespace ProjectBreadPit.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderItemId { get; set; }
 
-        public int BroodjeId { get; set; } // Foreign key to the sandwich/broodje
+        public int BroodjeId { get; set; }
 
-        [ForeignKey("BroodjeId")] // Specify the foreign key relationship
-        public Broodje Broodje { get; set; } // Navigation property to access the related Broodje
+        [ForeignKey("BroodjeId")]
+        public Broodje Broodje { get; set; } 
 
         public string BroodjeName { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
 
-        // Foreign key to the parent order
         public int OrderId { get; set; }
         public Order Order { get; set; }
     }
